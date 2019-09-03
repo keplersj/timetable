@@ -23,7 +23,9 @@ fn modify_scheduled_request() -> impl Responder {
     HttpResponse::NotImplemented()
 }
 
-fn main() {
+fn main() -> std::io::Result<()> {
+    let sys = actix_rt::System::builder().stop_on_panic(false).build();
+
     std::env::set_var("RUST_LOG", "actix_web=info");
     env_logger::init();
 
@@ -41,10 +43,8 @@ fn main() {
             .route("/schedule/{id}", web::put().to(modify_scheduled_request))
     };
 
-    println!("Starting server on {}", address);
-    HttpServer::new(create_app)
-        .bind(address)
-        .unwrap()
-        .run()
-        .unwrap();
+    HttpServer::new(create_app).bind(address)?.start();
+
+    println!("Started http server: {}", address);
+    sys.run()
 }
