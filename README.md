@@ -49,13 +49,13 @@ Example payload:
 
 JSON Object containing the status of a scheduled webhook exeuction, it should contain the following fields:
 
-| Field Name           | Type                                   | Description                                                                      |
-| -------------------- | -------------------------------------- | -------------------------------------------------------------------------------- |
-| `id`                 | `string`                               | The ID of the scheduled webhook execution this object is reporting the status of |
-| `scheduledTimestamp` | `string`                               | The timestamp this scheduled execution will execute or was executed at           |
-| `targetWebhook`      | `string`                               | The target webhook this scheduled executed will/did hit when executed            |
-| `responseWebook`     | `string`                               | The webhook timetable will send/sent the target webhook's response data to.      |
-| `status`             | `"waiting" | "executed" | "cancelled"` | The execution status of the scheduled webhook execution                          |
+| Field Name           | Type                                     | Description                                                                      |
+| -------------------- | ---------------------------------------- | -------------------------------------------------------------------------------- |
+| `id`                 | `string`                                 | The ID of the scheduled webhook execution this object is reporting the status of |
+| `scheduledTimestamp` | `string`                                 | The timestamp this scheduled execution will execute or was executed at           |
+| `targetWebhook`      | `string`                                 | The target webhook this scheduled executed will/did hit when executed            |
+| `responseWebook`     | `string`                                 | The webhook timetable will send/sent the target webhook's response data to.      |
+| `status`             | `"waiting" \| "executed" \| "cancelled"` | The execution status of the scheduled webhook execution                          |
 
 Example object:
 
@@ -102,7 +102,7 @@ After requesting the target webhook at the scheduled time, timetable will send t
 | `targetWebook`       | `string` | The webhook the execution hit.                      |
 | `status`             | `number` | The HTTP Status from the target webhook's response. |
 | `headers`            | `object` | The HTTP Headers from the target webhook's reponse. |
-| `body`               | `body`   | The body of the target webhook's response.          |
+| `body`               | `string` | The body of the target webhook's response.          |
 
 Example response:
 
