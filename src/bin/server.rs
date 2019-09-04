@@ -10,7 +10,13 @@ fn index() -> impl Responder {
 
 fn create_scheduled_request(payload: web::Json<data::ScheduleExecutionPayload>) -> impl Responder {
     println!("Create Scheduled Execution Payload: {:#?}", payload);
-    HttpResponse::NotImplemented()
+    HttpResponse::NotImplemented().json(data::ScheduledExecutionStatus {
+        id: "42".to_string(),
+        scheduledTimestamp: "".to_string(),
+        targetWebhook: "".to_string(),
+        responseWebhook: "".to_string(),
+        status: "waiting".to_string(),
+    })
 }
 
 fn delete_scheduled_request(path: web::Path<(String)>) -> impl Responder {
@@ -21,8 +27,13 @@ fn delete_scheduled_request(path: web::Path<(String)>) -> impl Responder {
 
 fn get_scheduled_request_status(path: web::Path<(String)>) -> impl Responder {
     let id = path.into_inner();
-    println!("Get Scheduled Execution {}", id);
-    HttpResponse::NotImplemented()
+    HttpResponse::NotImplemented().json(data::ScheduledExecutionStatus {
+        id,
+        scheduledTimestamp: "".to_string(),
+        targetWebhook: "".to_string(),
+        responseWebhook: "".to_string(),
+        status: "waiting".to_string(),
+    })
 }
 
 fn modify_scheduled_request(
@@ -31,7 +42,13 @@ fn modify_scheduled_request(
 ) -> impl Responder {
     let id = path.into_inner();
     println!("Modify Scheduled Execution {} Payload: {:#?}", id, payload);
-    HttpResponse::NotImplemented()
+    HttpResponse::NotImplemented().json(data::ScheduledExecutionStatus {
+        id,
+        scheduledTimestamp: "".to_string(),
+        targetWebhook: "".to_string(),
+        responseWebhook: "".to_string(),
+        status: "waiting".to_string(),
+    })
 }
 
 fn main() -> std::io::Result<()> {
