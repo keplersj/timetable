@@ -2,6 +2,7 @@ use actix_web::{middleware::Logger, web, App, HttpResponse, HttpServer, Responde
 use env_logger;
 use timetable::web::data;
 use url::Url;
+use chrono::Utc;
 
 fn index() -> impl Responder {
     HttpResponse::TemporaryRedirect()
@@ -30,7 +31,7 @@ fn get_scheduled_request_status(path: web::Path<(String)>) -> impl Responder {
     let id = path.into_inner();
     HttpResponse::NotImplemented().json(data::ScheduledExecutionStatus {
         id,
-        scheduled_timestamp: "".to_string(),
+        scheduled_timestamp: Utc::now(),
         target_webhook: Url::parse("https://example.dev/hook").unwrap(),
         response_webhook: Url::parse("https://example.dev/hook").unwrap(),
         status: data::ExecutionStatus::Waiting,

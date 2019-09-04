@@ -1,9 +1,9 @@
+use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use url::Url;
 
 type ID = String;
-type Timestamp = String;
 
 #[derive(Serialize, Debug)]
 #[serde(rename_all = "lowercase")]
@@ -16,7 +16,7 @@ pub enum ExecutionStatus {
 #[derive(Deserialize, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct ScheduleExecutionPayload {
-    pub scheduled_timestamp: Timestamp,
+    pub scheduled_timestamp: DateTime<Utc>,
     pub target_webhook: Url,
     pub response_webhook: Url,
 }
@@ -25,7 +25,7 @@ pub struct ScheduleExecutionPayload {
 #[serde(rename_all = "camelCase")]
 pub struct ScheduledExecutionStatus {
     pub id: ID,
-    pub scheduled_timestamp: Timestamp,
+    pub scheduled_timestamp: DateTime<Utc>,
     pub target_webhook: Url,
     pub response_webhook: Url,
     pub status: ExecutionStatus,
@@ -35,7 +35,7 @@ pub struct ScheduledExecutionStatus {
 #[serde(rename_all = "camelCase")]
 pub struct ExecutionResponse {
     id: ID,
-    scheduled_timestamp: Timestamp,
+    scheduled_timestamp: DateTime<Utc>,
     target_webhook: Url,
     status: u8,
     headers: HashMap<String, String>,
