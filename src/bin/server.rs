@@ -1,57 +1,6 @@
-use actix_web::{middleware::Logger, web, App, HttpResponse, HttpServer, Responder};
+use actix_web::{middleware::Logger, web, App, HttpServer};
 use env_logger;
-use timetable::web::data;
-use url::Url;
-use chrono::Utc;
-
-fn index() -> impl Responder {
-    HttpResponse::TemporaryRedirect()
-        .header("Location", "https://github.com/keplersj/timetable")
-        .finish()
-}
-
-fn create_scheduled_request(payload: web::Json<data::ScheduleExecutionPayload>) -> impl Responder {
-    println!("Create Scheduled Execution Payload: {:#?}", payload);
-    HttpResponse::NotImplemented().json(data::ScheduledExecutionStatus {
-        id: "42".to_string(),
-        scheduled_timestamp: payload.0.scheduled_timestamp,
-        target_webhook: payload.0.target_webhook,
-        response_webhook: payload.0.response_webhook,
-        status: data::ExecutionStatus::Waiting,
-    })
-}
-
-fn delete_scheduled_request(path: web::Path<(String)>) -> impl Responder {
-    let id = path.into_inner();
-    println!("Delete Scheduled Execution {}", id);
-    HttpResponse::NotImplemented()
-}
-
-fn get_scheduled_request_status(path: web::Path<(String)>) -> impl Responder {
-    let id = path.into_inner();
-    HttpResponse::NotImplemented().json(data::ScheduledExecutionStatus {
-        id,
-        scheduled_timestamp: Utc::now(),
-        target_webhook: Url::parse("https://example.dev/hook").unwrap(),
-        response_webhook: Url::parse("https://example.dev/hook").unwrap(),
-        status: data::ExecutionStatus::Waiting,
-    })
-}
-
-fn modify_scheduled_request(
-    path: web::Path<(String)>,
-    payload: web::Json<data::ScheduleExecutionPayload>,
-) -> impl Responder {
-    let id = path.into_inner();
-    println!("Modify Scheduled Execution {} Payload: {:#?}", id, payload);
-    HttpResponse::NotImplemented().json(data::ScheduledExecutionStatus {
-        id,
-        scheduled_timestamp: payload.0.scheduled_timestamp,
-        target_webhook: payload.0.target_webhook,
-        response_webhook: payload.0.response_webhook,
-        status: data::ExecutionStatus::Waiting,
-    })
-}
+use timetable::web::handlers;
 
 fn main() -> std::io::Result<()> {
     let sys = actix_rt::System::builder().stop_on_panic(false).build();
@@ -63,14 +12,23 @@ fn main() -> std::io::Result<()> {
     let create_app = || {
         App::new()
             .wrap(Logger::default())
-            .route("/", web::get().to(index))
-            .route("/schedule", web::post().to(create_scheduled_request))
-            .route("/schedule/{id}", web::delete().to(delete_scheduled_request))
+            .route("/", web::get().to(handlers::index))
+            .route(
+                "/schedule",
+                web::post().to(handlers::create_scheduled_request),
+            )
             .route(
                 "/schedule/{id}",
-                web::get().to(get_scheduled_request_status),
+                web::delete().to(handlers::delete_scheduled_request),
             )
-            .route("/schedule/{id}", web::put().to(modify_scheduled_request))
+            .route(
+                "/schedule/{id}",
+                web::get().to(handlers::get_scheduled_request_status),
+            )
+            .route(
+                "/schedule/{id}",
+                web::put().to(handlers::modify_scheduled_request),
+            )
     };
 
     HttpServer::new(create_app).bind(address)?.start();
