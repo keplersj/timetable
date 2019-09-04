@@ -1,6 +1,7 @@
 use actix_web::{middleware::Logger, web, App, HttpResponse, HttpServer, Responder};
 use env_logger;
 use timetable::web::data;
+use url::Url;
 
 fn index() -> impl Responder {
     HttpResponse::TemporaryRedirect()
@@ -12,9 +13,9 @@ fn create_scheduled_request(payload: web::Json<data::ScheduleExecutionPayload>) 
     println!("Create Scheduled Execution Payload: {:#?}", payload);
     HttpResponse::NotImplemented().json(data::ScheduledExecutionStatus {
         id: "42".to_string(),
-        scheduled_timestamp: "".to_string(),
-        target_webhook: "".to_string(),
-        response_webhook: "".to_string(),
+        scheduled_timestamp: payload.0.scheduled_timestamp,
+        target_webhook: payload.0.target_webhook,
+        response_webhook: payload.0.response_webhook,
         status: data::ExecutionStatus::Waiting,
     })
 }
@@ -30,8 +31,8 @@ fn get_scheduled_request_status(path: web::Path<(String)>) -> impl Responder {
     HttpResponse::NotImplemented().json(data::ScheduledExecutionStatus {
         id,
         scheduled_timestamp: "".to_string(),
-        target_webhook: "".to_string(),
-        response_webhook: "".to_string(),
+        target_webhook: Url::parse("https://example.dev/hook").unwrap(),
+        response_webhook: Url::parse("https://example.dev/hook").unwrap(),
         status: data::ExecutionStatus::Waiting,
     })
 }
@@ -44,9 +45,9 @@ fn modify_scheduled_request(
     println!("Modify Scheduled Execution {} Payload: {:#?}", id, payload);
     HttpResponse::NotImplemented().json(data::ScheduledExecutionStatus {
         id,
-        scheduled_timestamp: "".to_string(),
-        target_webhook: "".to_string(),
-        response_webhook: "".to_string(),
+        scheduled_timestamp: payload.0.scheduled_timestamp,
+        target_webhook: payload.0.target_webhook,
+        response_webhook: payload.0.response_webhook,
         status: data::ExecutionStatus::Waiting,
     })
 }

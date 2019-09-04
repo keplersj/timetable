@@ -1,9 +1,9 @@
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
+use url::Url;
 
 type ID = String;
 type Timestamp = String;
-type Webhook = String;
 
 #[derive(Serialize, Debug)]
 #[serde(rename_all = "lowercase")]
@@ -17,8 +17,8 @@ pub enum ExecutionStatus {
 #[serde(rename_all = "camelCase")]
 pub struct ScheduleExecutionPayload {
     pub scheduled_timestamp: Timestamp,
-    pub target_webhook: Webhook,
-    pub response_webhook: Webhook,
+    pub target_webhook: Url,
+    pub response_webhook: Url,
 }
 
 #[derive(Serialize, Debug)]
@@ -26,8 +26,8 @@ pub struct ScheduleExecutionPayload {
 pub struct ScheduledExecutionStatus {
     pub id: ID,
     pub scheduled_timestamp: Timestamp,
-    pub target_webhook: Webhook,
-    pub response_webhook: Webhook,
+    pub target_webhook: Url,
+    pub response_webhook: Url,
     pub status: ExecutionStatus,
 }
 
@@ -36,7 +36,7 @@ pub struct ScheduledExecutionStatus {
 pub struct ExecutionResponse {
     id: ID,
     scheduled_timestamp: Timestamp,
-    target_webhook: Webhook,
+    target_webhook: Url,
     status: u8,
     headers: HashMap<String, String>,
     body: String,
