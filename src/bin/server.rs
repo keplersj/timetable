@@ -15,7 +15,7 @@ fn create_scheduled_request(payload: web::Json<data::ScheduleExecutionPayload>) 
         scheduled_timestamp: "".to_string(),
         target_webhook: "".to_string(),
         response_webhook: "".to_string(),
-        status: "waiting".to_string(),
+        status: data::ExecutionStatus::Waiting,
     })
 }
 
@@ -32,7 +32,7 @@ fn get_scheduled_request_status(path: web::Path<(String)>) -> impl Responder {
         scheduled_timestamp: "".to_string(),
         target_webhook: "".to_string(),
         response_webhook: "".to_string(),
-        status: "waiting".to_string(),
+        status: data::ExecutionStatus::Waiting,
     })
 }
 
@@ -47,7 +47,7 @@ fn modify_scheduled_request(
         scheduled_timestamp: "".to_string(),
         target_webhook: "".to_string(),
         response_webhook: "".to_string(),
-        status: "waiting".to_string(),
+        status: data::ExecutionStatus::Waiting,
     })
 }
 

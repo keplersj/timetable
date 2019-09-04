@@ -5,6 +5,14 @@ type ID = String;
 type Timestamp = String;
 type Webhook = String;
 
+#[derive(Serialize, Debug)]
+#[serde(rename_all = "lowercase")]
+pub enum ExecutionStatus {
+    Waiting,
+    Executed,
+    Cancelled,
+}
+
 #[derive(Deserialize, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct ScheduleExecutionPayload {
@@ -20,7 +28,7 @@ pub struct ScheduledExecutionStatus {
     pub scheduled_timestamp: Timestamp,
     pub target_webhook: Webhook,
     pub response_webhook: Webhook,
-    pub status: String,
+    pub status: ExecutionStatus,
 }
 
 #[derive(Serialize, Debug)]
