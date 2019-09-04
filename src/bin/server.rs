@@ -1,8 +1,6 @@
-#![allow(non_snake_case)] // Needed for JSON attributes
-
 use actix_web::{middleware::Logger, web, App, HttpResponse, HttpServer, Responder};
 use env_logger;
-use serde::Deserialize;
+use timetable::web::data;
 
 fn index() -> impl Responder {
     HttpResponse::TemporaryRedirect()
@@ -10,14 +8,7 @@ fn index() -> impl Responder {
         .finish()
 }
 
-#[derive(Deserialize, Debug)]
-struct ScheduleExecutionPayload {
-    scheduledTimestamp: String,
-    targetWebhook: String,
-    responseWebhook: String,
-}
-
-fn create_scheduled_request(payload: web::Json<ScheduleExecutionPayload>) -> impl Responder {
+fn create_scheduled_request(payload: web::Json<data::ScheduleExecutionPayload>) -> impl Responder {
     println!("Create Scheduled Execution Payload: {:#?}", payload);
     HttpResponse::NotImplemented()
 }
@@ -36,7 +27,7 @@ fn get_scheduled_request_status(path: web::Path<(String)>) -> impl Responder {
 
 fn modify_scheduled_request(
     path: web::Path<(String)>,
-    payload: web::Json<ScheduleExecutionPayload>,
+    payload: web::Json<data::ScheduleExecutionPayload>,
 ) -> impl Responder {
     let id = path.into_inner();
     println!("Modify Scheduled Execution {} Payload: {:#?}", id, payload);
