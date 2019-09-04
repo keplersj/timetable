@@ -1,5 +1,8 @@
+#![allow(non_snake_case)] // Needed for JSON attributes
+
 use actix_web::{middleware::Logger, web, App, HttpResponse, HttpServer, Responder};
 use env_logger;
+use serde::Deserialize;
 
 fn index() -> impl Responder {
     HttpResponse::TemporaryRedirect()
@@ -7,19 +10,36 @@ fn index() -> impl Responder {
         .finish()
 }
 
-fn create_scheduled_request() -> impl Responder {
+#[derive(Deserialize, Debug)]
+struct ScheduleExecutionPayload {
+    scheduledTimestamp: String,
+    targetWebhook: String,
+    responseWebhook: String,
+}
+
+fn create_scheduled_request(payload: web::Json<ScheduleExecutionPayload>) -> impl Responder {
+    println!("Create Scheduled Execution Payload: {:#?}", payload);
     HttpResponse::NotImplemented()
 }
 
-fn delete_scheduled_request() -> impl Responder {
+fn delete_scheduled_request(path: web::Path<(String)>) -> impl Responder {
+    let id = path.into_inner();
+    println!("Delete Scheduled Execution {}", id);
     HttpResponse::NotImplemented()
 }
 
-fn get_scheduled_request_status() -> impl Responder {
+fn get_scheduled_request_status(path: web::Path<(String)>) -> impl Responder {
+    let id = path.into_inner();
+    println!("Get Scheduled Execution {}", id);
     HttpResponse::NotImplemented()
 }
 
-fn modify_scheduled_request() -> impl Responder {
+fn modify_scheduled_request(
+    path: web::Path<(String)>,
+    payload: web::Json<ScheduleExecutionPayload>,
+) -> impl Responder {
+    let id = path.into_inner();
+    println!("Modify Scheduled Execution {} Payload: {:#?}", id, payload);
     HttpResponse::NotImplemented()
 }
 
